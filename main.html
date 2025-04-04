@@ -13,8 +13,6 @@
             position: relative;
             display: inline-block;
         }
-        
-        /* Botón para continuar el video, solo cambia la posicion para casos de ubicacion */
         .boton-continuar {
             position: absolute;
             bottom: 5%;
@@ -27,8 +25,6 @@
             display: none;
             background-color: orange;
         }
-        
-        /* Botón para elegir la opción RAM, solo cambia la posicion para casos de ubicacion*/
         .boton-opcion {
             position: absolute;
             bottom: 50%;
@@ -41,8 +37,6 @@
             display: none;
             background-color: transparent;
         }
-        
-        /* Botón para elegir la opción Tarjeta Madre, solo cambia la posicion para casos de ubicacion */
         .boton-opcion2 {
             position: absolute;
             top: 30%;
@@ -60,81 +54,78 @@
 <body>
     <h1>Video Interactivo con Decisiones</h1>
     <div class="contenedor-video">
-        <!-- Video principal -->
         <video id="video" width="640" height="360" controls>
-            <source src="../VideoInteractivo/videos/video.mp4" type="video/mp4">
+            <source src="https://content.app-sources.com/s/520644539291908031/uploads/videos/video-3458181.mp4" type="video/mp4">
             Tu navegador no soporta el video.
         </video>
-        
-        <!-- Botones para interactuar -->
         <button id="opcion1" class="boton-opcion">RAM</button>
         <button id="opcion2" class="boton-opcion2">Tarjeta madre</button>
         <button id="opcion3" class="boton-continuar">Continuar</button>
     </div>
 
     <script>
-        // Selecciona los elementos del DOM
         const video = document.getElementById("video");
         const opcion1 = document.getElementById("opcion1");
         const opcion2 = document.getElementById("opcion2");
         const opcion3 = document.getElementById("opcion3");
 
-        // Variable para controlar la reproducción
         let continuarReproduccion = false;
-        let tiempoVideo = 0; // Variable para guardar el tiempo del video
+        let tiempoVideo = 0;
 
-        // Evento para detectar cuando el video avanza
         video.addEventListener("timeupdate", () => {
-            if (!continuarReproduccion && video.currentTime > 2) {
-                tiempoVideo = video.currentTime; // Guarda el tiempo actual
+            if (!continuarReproduccion && video.currentTime >= 2) {
+                tiempoVideo = video.currentTime;
                 opcion1.style.display = "block";
                 opcion2.style.display = "block";
                 opcion3.style.display = "block";
-                video.pause(); // Pausa el video para que el usuario decida
+                video.pause();
             }
         });
 
-        // Oculta los botones de la pantalla
         function ocultarBotones() {
             opcion1.style.display = "none";
             opcion2.style.display = "none";
             opcion3.style.display = "none";
         }
 
-        // Evento para la opción RAM
         opcion1.addEventListener("click", () => {
-            tiempoVideo = video.currentTime; // Guarda el tiempo actual del video
+            tiempoVideo = video.currentTime;
             continuarReproduccion = true;
-            video.src = "../VideoInteractivo/videos/ram.mp4"; // Cambia el video a RAM
-            video.play();
+            video.src = "https://content.app-sources.com/s/520644539291908031/uploads/videos/ram-3458097.mp4";
+            video.load();
+            video.addEventListener("loadedmetadata", () => {
+                video.play();
+            }, { once: true });
             ocultarBotones();
         });
 
-        // Cambia el video a Tarjeta Madre
         opcion2.addEventListener("click", () => {
-            tiempoVideo = video.currentTime; 
+            tiempoVideo = video.currentTime;
             continuarReproduccion = true;
-            video.src = "../VideoInteractivo/videos/tarjeta_madre.mp4"; // Cambia el video a video de tarjeta madre pero no tengo por el momento
-            video.play();
+            video.src = "https://content.app-sources.com/s/520644539291908031/uploads/videos/ram-3458097.mp4";
+            video.load();
+            video.addEventListener("loadedmetadata", () => {
+                video.play();
+            }, { once: true });
             ocultarBotones();
         });
 
-        // Evento para continuar con el video original
         opcion3.addEventListener("click", () => {
             continuarReproduccion = true;
-            video.currentTime = tiempoVideo; 
+            video.currentTime = tiempoVideo;
             video.play();
             ocultarBotones();
         });
 
-        // Evento para cuando termine el video RAM o Tarjeta Madre
-        // Regresa al video principal y retoma desde donde se quedó
         video.addEventListener("ended", () => {
-            if (video.src.includes("ram.mp4") || video.src.includes("tarjeta_madre.mp4")) {
-                video.src = "../VideoInteractivo/videos/video.mp4"; // Regresa al video principal
-                video.currentTime = tiempoVideo; // Retoma desde donde se quedó
-                video.play();
+            if (video.src.includes("ram-3458097.mp4")) {
                 continuarReproduccion = false;
+                video.src = "https://content.app-sources.com/s/520644539291908031/uploads/videos/video-3458181.mp4";
+                video.load();
+                video.addEventListener("loadedmetadata", () => {
+                    video.currentTime = tiempoVideo;
+                    video.play();
+                }, { once: true });
             }
         });
     </script>
